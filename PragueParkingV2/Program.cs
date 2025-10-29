@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Data;
+﻿//using System.ComponentModel.DataAnnotations;
+//using System.Data;
 using System.Text.Json;
-using System.Transactions;
-using System.Xml.Linq;
+//using System.Transactions;
+//using System.Xml.Linq;
 using ClassLibrary;
 using Spectre.Console;
 
@@ -153,7 +153,7 @@ namespace PrageParkingV2
                 while (true)
                 {
                     Console.Write("Please enter the registration number: ");
-                    string regNumber = Console.ReadLine();
+                    string regNumber = Console.ReadLine()?.Trim();
 
                     if (string.IsNullOrEmpty(regNumber) | regNumber.Length < 1 | regNumber.Length > 10 | pragueParking.ContainsSpecialCharacters(regNumber))
                     {
@@ -180,7 +180,7 @@ namespace PrageParkingV2
                 do
                 {
                     Console.Write("Please, enter registration number: ");
-                    regNumber = Console.ReadLine();
+                    regNumber = Console.ReadLine()?.Trim();
                     if (string.IsNullOrEmpty(regNumber))
                     {
                         var table2 = new Table();
@@ -239,7 +239,7 @@ namespace PrageParkingV2
                 do
                 {
                     Console.Write("Enter registration number of vehicle: ");
-                    regNumber = Console.ReadLine();
+                    regNumber = Console.ReadLine()?.Trim();
                     if (string.IsNullOrEmpty(regNumber))
                     {
                         var table2 = new Table();
@@ -310,7 +310,7 @@ namespace PrageParkingV2
             void LocateVehicle()
             {
                 Console.Write("Please enter the registration number of the vehicle: ");
-                String regnumber = Console.ReadLine();
+                String regnumber = Console.ReadLine()?.Trim();
                 bool found = false;
                 for (int i = 1; i < parkingSpots.Length; i++)
                 {
