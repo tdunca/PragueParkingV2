@@ -27,11 +27,11 @@ namespace PrageParkingV2
                 var selection = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                     .PageSize(7)
-                    .AddChoices(new[] 
-                    { 
-                        "Park vehicle", 
+                    .AddChoices(new[]
+                    {
+                        "Park vehicle",
                         "Retrieve vehicle",
-                        "Move vehicle", 
+                        "Move vehicle",
                         "Find vehicle",
                         "Clear Garage",
                         "Reload config",
@@ -95,9 +95,9 @@ namespace PrageParkingV2
                 {
                     string regNumber = GetRegNumber();
                     if (regNumber == "error")
-                        {
+                    {
                         return;
-                        }
+                    }
                     DateTime parkingTime = DateTime.Now;
                     Car newCar = new Car(regNumber, parkingTime);
 
@@ -108,7 +108,7 @@ namespace PrageParkingV2
                     }
                     SaveParkingSpots();
                 }
-                else if (type == 2) 
+                else if (type == 2)
                 {
                     string regNumber = GetRegNumber();
                     if (regNumber == "error")
@@ -125,7 +125,7 @@ namespace PrageParkingV2
                     }
                     SaveParkingSpots();
                 }
-        }
+            }
             int ChooseVehicleType()
             {
                 int type = 0;
@@ -248,7 +248,7 @@ namespace PrageParkingV2
                         return;
                     }
 
-                } while (string.IsNullOrEmpty (regNumber));
+                } while (string.IsNullOrEmpty(regNumber));
 
                 ParkingSpot currentSpot = null;
                 Vehicle vehicleToMove = null;
@@ -258,7 +258,7 @@ namespace PrageParkingV2
                 {
                     var spot = parkingSpots[i];
                     vehicleToMove = spot.parkingSpot.FirstOrDefault(Vehicle => Vehicle.RegNumber == regNumber);
-                    if (vehicleToMove ! == null)
+                    if (vehicleToMove! == null)
                     {
                         currentSpot = spot;
                         currentSpotIndex = i;
@@ -305,13 +305,13 @@ namespace PrageParkingV2
                         Console.WriteLine("[red]This is an invalid parking spot number. Try again[/]");
 
                     }
-                } while ( isValidToCheckOut );
+                } while (isValidToCheckOut);
             }
             void LocateVehicle()
             {
                 Console.Write("Please enter the registration number of the vehicle: ");
                 String regnumber = Console.ReadLine();
-                bool found = false; 
+                bool found = false;
                 for (int i = 1; i < parkingSpots.Length; i++)
                 {
                     var Spot = parkingSpots[i];
@@ -389,5 +389,58 @@ namespace PrageParkingV2
                 string updatedParkingArrayJsonString = JsonSerializer.Serialize(parkingSpots, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(filepath + "ParkingArray.json", updatedParkingArrayJsonString);
             }
+            void ReloadConfig()
+            {
+                pragueParking.ReloadConfigTxt();
+                parkingSpots = pragueParking.GarageSizeChange(parkingSpots);
+                SaveParkingSpots();
+            }
+            #region
+            void FigletPragueParking()
+            {
+                AnsiConsole.Write(
+                    new FigletText("Prague Parking")
+                    .Centered()
+                    .Color(Color.White));
+                Console.WriteLine("\n\n");
+            }
+            void TableStatusVehicle()
+            {
+                Table table = new Table();
+                table.AddColumns("[green] Empty [/]", "[yellow] Half full [/]", "[green] Full [/]")
+                    .Collapse().Centered().Expand();
+                AnsiConsole.Write(table);
+            }
+            void TablePriceMenu()
+            {
+                var table = new Table();
+                table.AddColumn("Vehicle type: ");
+                table.AddColumn(new TableColumn("Price per hour: ").Centered());
+                table.AddRow("First 10 min are free of charge");
+                table.AddRow("Car", $"{pragueParking.CarPrice} CZK per hour");
+                table.AddRow("Motorbike", $"{pragueParking.McPrice} CZK per hour");
+                AnsiConsole.Write(table.SimpleBorder().Alignment(Justify.Left));
+            }
+            #endregion
+            void EmptyGarage()
+            {
+                Console.WriteLine("Would you like to empty the entire garage?");
+                var confirm = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                    .PageSize(4).AddChoices(new[] { "Yes", "No" }));
+                if (confirm == "Yes")
+                {
+                    for (int i = 1; i < parkingSpot.Length; i++)
+                    {
+                        parkingSpots[i].parkingSpot.Clear();
+                        parkingSpots[i].CurrentSize = 0;
+                    }
+                    SaveParkingSpots();
+                }
+                else
+                {
+                    return;
+                }
+            }
         }
     }
+}
