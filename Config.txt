@@ -1,0 +1,5 @@
+#Prague Parking Config
+
+CarPrice = 20			#Hourly fee for cars
+McPrice = 10			#Hourly fee for motorcycles
+GarageSize = 101		#The total amount of parking spots
