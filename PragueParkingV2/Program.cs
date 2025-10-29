@@ -233,5 +233,79 @@ namespace PrageParkingV2
                     SaveParkingSpots();
                 }
             }
+            void MoveVehicle()
+            {
+                string regNumber;
+                do
+                {
+                    Console.Write("Enter registration number of vehicle: ");
+                    regNumber = Console.ReadLine();
+                    if (string.IsNullOrEmpty(regNumber))
+                    {
+                        var table2 = new Table();
+                        table2.AddColumn("[red]Vehicle not found, try again [/]");
+                        AnsiConsole.Write(table2);
+                        return;
+                    }
+
+                } while (string.IsNullOrEmpty (regNumber));
+
+                ParkingSpot currentSpot = null;
+                Vehicle vehicleToMove = null;
+                int currentSpotIndex = -1;
+
+                for (int i = 1; i < parkingSpots.Length; i++)
+                {
+                    var spot = parkingSpots[i];
+                    vehicleToMove = spot.parkingSpot.FirstOrDefault(Vehicle => Vehicle.RegNumber == regNumber);
+                    if (vehicleToMove ! == null)
+                    {
+                        currentSpot = spot;
+                        currentSpotIndex = i;
+                        break;
+                    }
+                }
+                if (currentSpot == null)
+                {
+                    var table3 = new Table();
+                    table3.AddColumn($"[red]Vehicle not found[/]");
+                    AnsiConsole.Write(table3);
+                    return;
+                }
+                Console.WriteLine($"Vehicle with registration number '{regNumber} is in spot '{currentSpotIndex}'");
+                int newSpotIndex;
+
+                bool isValidToCheckOut = true;
+                do
+                {
+                    Console.Write("Please enter the new parking spot number: ");
+                    if (int.TryParse(Console.ReadLine(), out newSpotIndex) && newSpotIndex > 0 && newSpotIndex < parkingSpots.Length)
+                    {
+                        var newSpot = parkingSpots[newSpotIndex];
+
+                        if (newSpot.CurrentSize + vehicleToMove.Size <= newSpot.MaxSize)
+                        {
+                            currentSpot.parkingSpot.Remove(vehicleToMove);
+                            currentSpot.CurrentSize -= vehicleToMove.Size;
+
+                            newSpot.parkingSpot.Add(vehicleToMove);
+                            newSpot.CurrentSize += vehicleToMove.Size;
+                            Console.WriteLine($"Vehicle with registration number '{regNumber}' is moved to spot ''{newSpotIndex}");
+
+                            SaveParkingSpots();
+                            isValidToCheckOut = false;
+                        }
+                        else
+                        {
+                            Console.WriteLine("[red]There is not enoug space in this parking spot[/]");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("[red]This is an invalid parking spot number. Try again[/]");
+
+                    }
+                } while ( isValidToCheckOut );
+            }
         }
     }
