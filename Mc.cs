@@ -1,8 +1,18 @@
-﻿using System;
-
-public class Class1
+﻿namespace ClassLibrary
 {
-	public Class1()
-	{
-	}
+    public class Mc : Vehicle
+    {
+        private int size = 2;
+
+        public override int Size
+        {
+            get { return size; }
+        }
+        public Mc(string regNumber, DataTime parkingTime)
+            : base(regNumber, parkingTime)
+        {
+
+        }
+
+    }
 }
