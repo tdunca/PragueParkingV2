@@ -62,14 +62,14 @@ namespace PrageParkingV2
                             LocateVehicle();
                             break;
                         }
-                    case "Clear Garage":
-                        {
-                            ClearGarage();
-                            break;
-                        }
                     case "Reload config":
                         {
                             ReloadConfig();
+                            break;
+                        }
+                    case "Empty garage":
+                        {
+                            EmptyGarage();
                             break;
                         }
                     case "Exit program":
@@ -217,8 +217,8 @@ namespace PrageParkingV2
                 TimeSpan parkingDuration = currentTime - vehicleToRemove.ParkingTime;
 
                 double price = CalculateParkingCost(vehicleToRemove, parkingDuration);
-                Console.WriteLine($"Parking duration: {parkingDuration.TotalMinutes:F1} minutes.");
-                Console.WriteLine($"Total cost: {price:F2}CZK");
+                Console.WriteLine($"Duration of parking: {parkingDuration.TotalMinutes:F1} minutes.");
+                Console.WriteLine($"The total cost is: {price:F2} CZK");
 
                 Console.WriteLine("Do you wish to retrieve and remove this vehicle?");
                 var confirm = AnsiConsole.Prompt(new SelectionPrompt<string>()
@@ -268,7 +268,7 @@ namespace PrageParkingV2
                 if (currentSpot == null)
                 {
                     var table3 = new Table();
-                    table3.AddColumn($"[red]Vehicle not found[/]");
+                    table3.AddColumn($"[red]Vehicle not found, try again[/]");
                     AnsiConsole.Write(table3);
                     return;
                 }
@@ -297,7 +297,7 @@ namespace PrageParkingV2
                         }
                         else
                         {
-                            Console.WriteLine("[red]There is not enoug space in this parking spot[/]");
+                            Console.WriteLine("[red]There is not enough space in this parking spot[/]");
                         }
                     }
                     else
@@ -307,5 +307,54 @@ namespace PrageParkingV2
                     }
                 } while ( isValidToCheckOut );
             }
+            void LocateVehicle()
+            {
+                Console.Write("Please enter the registration number of the vehicle: ");
+                String regnumber = Console.ReadLine();
+                bool found = false; 
+                for (int i = 1; i < parkingSpots.Length; i++)
+                {
+                    var Spot = parkingSpots[i];
+                    var vehicle = Spot?.parkingSpot.FirstOrDefault(v => v.RegNumber == regnumber);
+                    if (vehicle != null)
+                    {
+                        DateTime currentTime = DateTime.Now;
+                        TimeSpan duration = currentTime - vehicle.ParkingTime;
+                        double price = CalculateParkingCost(vehicle, duration);
+
+                        Console.WriteLine($"The vehicle with '{regnumber}' is in spot number '{i}'");
+                        Console.WriteLine($"Duration of parking: '{duration.TotalMinutes:F1}' minutes");
+                        Console.WriteLine($"The total cost is {price:F2} CZK");
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    Console.WriteLine("[red]Vehicle not found, try again[/]");
+                }
+            }
+            double CalculateParkingCost(Vehicle vehicle, TimeSpan duration)
+            {
+                const double freetime = 10;
+                double rate = 0;
+                if (duration.TotalMinutes <= freetime)
+                {
+                    return 0;
+                }
+                else
+                {
+                    if (vehicle.Size == 2)
+                    {
+                        rate = pragueParking.McPrice;
+                    }
+                    else if (vehicle.Size == 4)
+                    {
+                        rate = pragueParking.CarPrice;
+                    }
+                }
+                return ((duration.TotalMinutes - freetime) / 60) * rate;
+            }
+            void 
         }
     }
