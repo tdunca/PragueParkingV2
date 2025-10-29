@@ -226,7 +226,7 @@ namespace PrageParkingV2
                 if (confirm == "Yes")
                 {
                     currentSpot.parkingSpot.Remove(vehicleToRemove);
-                    currentSpot.CurrentSize - = vehicleToRemove.Size;
+                    currentSpot.CurrentSize -= vehicleToRemove.Size; 
 
                     Console.WriteLine($"Vehicle with registration: {regNumber} has been collected from spot {currentSpotIndex}");
 
@@ -429,7 +429,7 @@ namespace PrageParkingV2
                     .PageSize(4).AddChoices(new[] { "Yes", "No" }));
                 if (confirm == "Yes")
                 {
-                    for (int i = 1; i < parkingSpot.Length; i++)
+                    for (int i = 1; i < parkingSpots.Length; i++)
                     {
                         parkingSpots[i].parkingSpot.Clear();
                         parkingSpots[i].CurrentSize = 0;
