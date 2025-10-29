@@ -1,8 +1,134 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
-public class Class1
+namespace ClassLibrary
 {
-	public Class1()
-	{
-	}
+    public class ParkingGarage()
+    {
+        public int McPrice { get; set; }
+        public int CarPrice { get; set; }
+        public int GarageSize { get; set; }
+        public ParkingGarage()
+        {
+            string filepath = "../../../";
+            var configValues = new Dictionary<string, int>();
+
+            foreach (var line in File.ReadLines(filepath + config.txt))
+            {
+                if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#")) continue;
+                var parts = line.Split(new[] { '=' }, 2);
+                if (parts.Length == 2)
+                {
+                    string key = parts[0].Trim();
+                    string value = parts[1].Trim().Split('#')[0].Trim();
+                    configValues[key] = int.Parse(value);
+                }
+            }
+            configValues.TryGetValue("CarPrice", out int configCarPrice);
+            configValues.TryGetValue("McPrice", out int configMcPrice);
+            configValues.TryGetValue("GarageSize", out int configGarageSize);
+
+            this.CarPrice = configCarPrice;
+            this.McPrice = configMcPrice;
+            this.GarageSize = configGarageSize;
+        }
+        public void ReloadConfigTxt()
+        {
+            string filepath = "../../../";
+            var configValues = new Dictionary<string, int>();
+
+            foreach (var line in File.ReadLines(filepath + "config.txt"))
+            {
+                if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#")) continue;
+
+                var parts = line.Split(new[] { '=' }, 2);
+                if (parts.Length == 2)
+                {
+                    string key = parts[0].Trim();
+                    string value = parts[1].Trim().Split('#')[0].Trim();
+                    configValues[key] = int.Parse(value);
+                }
+            }
+            configValues.TryGetValue("CarPrice", out int configCarPrice);
+            configValues.TryGetValue("McPrice", out int configMcPrice);
+            configValues.TryGetValue("GarageSize", out int configGarageSize);
+
+            this.CarPrice = configCarPrice;
+            this.McPrice = configMcPrice;
+            this.GarageSize = configGarageSize;
+        }
+
+        public ParkingSpot[] GarageSizeChange(ParkingSpot[] input)
+        {
+            bool isEmpty = true;
+            ParkingSpot[] output;
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i].CurrentSize > 0)
+                {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (this.GarageSize < input.Length && isEmpty == false)
+            {
+                Console.WriteLine("The garage is not empty. Number of spots are the same. \n + You must empty the garage before decreasing it's size");
+                return input;
+            }
+            else if (this.GarageSize < input.Length && isEmpty == true)
+            {
+                output = new ParkingSpot[this.GarageSize];
+                for (int i = 0; i < output.Length; i++)
+                {
+                    output[i] = new ParkingSpot(0);
+                }
+            }
+            else
+            {
+                output = new ParkingSpot[this.GarageSize];
+                Array.Copy(input, output, input.Length);
+                for (int i = input.Length; i < output.Length; i++)
+                {
+                    output[i] = new ParkingSpot(0);
+                }
+            }
+            return output;
+        }
+        public ParkingSpot[] ReadParkingSpotsFromJson()
+        {
+            string filepath = "../../../";
+            ParkingSpot[] parkingSpots;
+            if (File.Exists(filepath + "ParkingArray.json"))
+            {
+                string parkingJsonString = File.ReadAllText(filepath + "ParkingArray.json");
+                parkingSpots = JsonSerializer.Deserialize<ParkingSpot[]>(parkingJsonString);
+            }
+            else
+            {
+                DateTime testDateTime = DateTime.Now;
+                parkingSpots = new ParkingSpot[this.GarageSize];
+                for (int i = 0; i < parkingSpots.Length; i++)
+                {
+                    parkingSpots[i] = new ParkingSpot(0);
+                }
+                Car testCar = new Car("test123", testDateTime);
+                Mc testMc = new Mc("test456", testDateTime);
+            }
+            return parkingSpots;
+        }
+        public bool ContainsSpecialCharacters(string regNumber)
+        {
+            return Regex.IsMatch(regNumber, 0"[^\p{L}\p{N}]");
+        }
+        public bool FileExists(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+            return File.Exists(fileName);
+        }
+    }
 }
