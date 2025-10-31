@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ClassLibrary;
-namespace ParkingTests
+﻿using ClassLibrary;
+
+namespace ParkingTestTemp
 {
     [TestClass]
     public class ConfigFileTest

@@ -1,7 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ClassLibrary;
+﻿using ClassLibrary;
 
-namespace ParkingTests
+namespace ParkingTestTemp
 {
     [TestClass]
     public class SpecialCharacterTest
@@ -9,7 +8,6 @@ namespace ParkingTests
         [TestMethod]
         public void StringDoesContainSpecialCharacter()
         {
-
             var parkingGarage = new ParkingGarage();
             string stringToTest = "Testing testing!";
             bool fromCall;
