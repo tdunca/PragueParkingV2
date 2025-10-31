@@ -13,13 +13,14 @@ namespace PrageParkingV2
             ParkingSpot[] parkingSpots = pragueParking.ReadParkingSpotsFromJson();
             parkingSpots = pragueParking.GarageSizeChange(parkingSpots);
             SaveParkingSpots();
-            bool exit = false;
+            bool exit = false; //Styr huvudloopen
             while (!exit)
             {
                 FigletPragueParking();
                 ShowParkingSpaces();
                 TablePriceMenu();
 
+                //Meny
                 var selection = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                     .PageSize(7)
@@ -89,7 +90,7 @@ namespace PrageParkingV2
 
                 if (type == 1)
                 {
-                    string regNumber = GetRegNumber();
+                    string regNumber = GetRegNumber(); //Validering och dubblettkontroll
                     if (regNumber == "error")
                     {
                         return;
@@ -154,9 +155,10 @@ namespace PrageParkingV2
                     if (string.IsNullOrEmpty(regNumber) | regNumber.Length < 1 | regNumber.Length > 10 | pragueParking.ContainsSpecialCharacters(regNumber))
                     {
                         Console.WriteLine("[red]This is not a valid registration number, try again.[/]");
-                        continue;
+                        continue; 
                     }
 
+                    //dubblettkontroll, kollar varje spot om dubblett
                     bool regNumberExists = parkingSpots.Any(spot => spot.ContainsVehicle(regNumber));
 
                     if (regNumberExists)
@@ -185,14 +187,14 @@ namespace PrageParkingV2
                         return;
                     }
                 }
-                while (string.IsNullOrEmpty(regNumber));
+                while (string.IsNullOrEmpty(regNumber)); //Fortsätter ge om input tills användaren skriver något 
                 ParkingSpot currentSpot = null;
                 Vehicle vehicleToRemove = null;
                 int currentSpotIndex = -1;
 
                 for (int i = 1; i < parkingSpots.Length; i++)
                 {
-                    var spot = parkingSpots[i];
+                    var spot = parkingSpots[i]; //hämtar nuvarande plats i loopen
                     vehicleToRemove = spot.parkingSpot.FirstOrDefault(v => v.RegNumber == regNumber);
 
                     if (vehicleToRemove != null)
@@ -210,7 +212,7 @@ namespace PrageParkingV2
                     return;
                 }
                 DateTime currentTime = DateTime.Now;
-                TimeSpan parkingDuration = currentTime - vehicleToRemove.ParkingTime;
+                TimeSpan parkingDuration = currentTime - vehicleToRemove.ParkingTime; //Räknar ut hur länge fordonet stått
 
                 double price = CalculateParkingCost(vehicleToRemove, parkingDuration);
                 Console.WriteLine($"Duration of parking: {parkingDuration.TotalMinutes:F1} minutes.");
@@ -222,13 +224,15 @@ namespace PrageParkingV2
                 if (confirm == "Yes")
                 {
                     currentSpot.parkingSpot.Remove(vehicleToRemove);
-                    currentSpot.CurrentSize -= vehicleToRemove.Size; 
+                    currentSpot.CurrentSize -= vehicleToRemove.Size;
 
                     Console.WriteLine($"Vehicle with registration: {regNumber} has been collected from spot {currentSpotIndex}");
 
                     SaveParkingSpots();
                 }
             }
+
+            //Flyttar fordon
             void MoveVehicle()
             {
                 string regNumber;
@@ -244,20 +248,20 @@ namespace PrageParkingV2
                         return;
                     }
 
-                } while (string.IsNullOrEmpty(regNumber));
+                } while (string.IsNullOrEmpty(regNumber)); //loopar tills giligt regnr ges
 
-                ParkingSpot currentSpot = null;
-                Vehicle vehicleToMove = null;
-                int currentSpotIndex = -1;
+                ParkingSpot currentSpot = null; //sparar nuvarande
+                Vehicle vehicleToMove = null; //sparar fordon som ska flyttas 
+                int currentSpotIndex = -1; //index för nuvarande
 
                 for (int i = 1; i < parkingSpots.Length; i++)
                 {
-                    var spot = parkingSpots[i];
-                    vehicleToMove = spot.parkingSpot.FirstOrDefault(Vehicle => Vehicle.RegNumber == regNumber);
+                    var spot = parkingSpots[i]; //hämtar aktuell plats
+                    vehicleToMove = spot.parkingSpot.FirstOrDefault(Vehicle => Vehicle.RegNumber == regNumber); 
                     if (vehicleToMove != null)
                     {
-                        currentSpot = spot;
-                        currentSpotIndex = i;
+                        currentSpot = spot; //sparar platsreferens
+                        currentSpotIndex = i; //sparar index
                         break;
                     }
                 }
@@ -271,22 +275,22 @@ namespace PrageParkingV2
                 Console.WriteLine($"Vehicle with registration number '{regNumber} is in spot '{currentSpotIndex}'");
                 int newSpotIndex;
 
-                bool isValidToCheckOut = true;
+                bool isValidToCheckOut = true; //loopar tills giltig ny plats
                 do
                 {
                     Console.Write("Please enter the new parking spot number: ");
-                    if (int.TryParse(Console.ReadLine(), out newSpotIndex) && newSpotIndex > 0 && newSpotIndex < parkingSpots.Length)
+                    if (int.TryParse(Console.ReadLine(), out newSpotIndex) && newSpotIndex > 0 && newSpotIndex < parkingSpots.Length) //kollar om plats har utrymme
                     {
                         var newSpot = parkingSpots[newSpotIndex];
 
                         if (newSpot.CurrentSize + vehicleToMove.Size <= newSpot.MaxSize)
                         {
-                            currentSpot.parkingSpot.Remove(vehicleToMove);
-                            currentSpot.CurrentSize -= vehicleToMove.Size;
+                            currentSpot.parkingSpot.Remove(vehicleToMove); //Tar bort fordonet
+                            currentSpot.CurrentSize -= vehicleToMove.Size; //Fixar storlek
 
-                            newSpot.parkingSpot.Add(vehicleToMove);
+                            newSpot.parkingSpot.Add(vehicleToMove); //Lägger till på ny plats
                             newSpot.CurrentSize += vehicleToMove.Size;
-                            Console.WriteLine($"Vehicle with registration number '{regNumber}' is moved to spot '{newSpotIndex}");
+                            Console.WriteLine($"Vehicle with registration number '{regNumber}' is moved to spot '{newSpotIndex}"); 
 
                             SaveParkingSpots();
                             isValidToCheckOut = false;
@@ -303,6 +307,8 @@ namespace PrageParkingV2
                     }
                 } while (isValidToCheckOut);
             }
+
+            //Söker efter fordon i garaget, anger plats, tid och pris 
             void LocateVehicle()
             {
                 Console.Write("Please enter the registration number of the vehicle: ");
@@ -311,12 +317,12 @@ namespace PrageParkingV2
                 for (int i = 1; i < parkingSpots.Length; i++)
                 {
                     var Spot = parkingSpots[i];
-                    var vehicle = Spot?.parkingSpot.FirstOrDefault(v => v.RegNumber == regnumber);
+                    var vehicle = Spot?.parkingSpot.FirstOrDefault(v => v.RegNumber == regnumber); // letar upp fordonet i rutan
                     if (vehicle != null)
                     {
-                        DateTime currentTime = DateTime.Now;
-                        TimeSpan duration = currentTime - vehicle.ParkingTime;
-                        double price = CalculateParkingCost(vehicle, duration);
+                        DateTime currentTime = DateTime.Now; //nuvarande tid
+                        TimeSpan duration = currentTime - vehicle.ParkingTime; //parkerad tid 
+                        double price = CalculateParkingCost(vehicle, duration); //pris
 
                         Console.WriteLine($"The vehicle with '{regnumber}' is in spot number '{i}'");
                         Console.WriteLine($"Duration of parking: '{duration.TotalMinutes:F1}' minutes");
@@ -330,6 +336,8 @@ namespace PrageParkingV2
                     Console.WriteLine("[red]Vehicle not found, try again[/]");
                 }
             }
+
+            //räknar ut kostnad och returnerar i CZK
             double CalculateParkingCost(Vehicle vehicle, TimeSpan duration)
             {
                 const double freetime = 10;
@@ -348,9 +356,11 @@ namespace PrageParkingV2
                     {
                         rate = pragueParking.CarPrice;
                     }
-                }
+                } //räknar kostnad över freetime
                 return ((duration.TotalMinutes - freetime) / 60) * rate;
             }
+
+            //loopar igenom alla platser och räknas ur status
             void ShowParkingSpaces()
             {
                 int emptyCount = 0;
@@ -362,17 +372,17 @@ namespace PrageParkingV2
                     var spot = parkingSpots[i];
                     if (spot == null) continue;
 
-                    if (spot.CurrentSize <= 0)
+                    if (spot.CurrentSize <= 0) //tomma
                     {
                         emptyCount++;
                     }
-                    else if (spot.CurrentSize < spot.MaxSize)
+                    else if (spot.CurrentSize < spot.MaxSize) //halvfulla
                     {
                         halfFullCount++;
                     }
-                    else // spot.CurrentSize >= spot.MaxSize
+                    else 
                     {
-                        fullCount++;
+                        fullCount++; //fulla
                     }
                 }
 
@@ -383,21 +393,25 @@ namespace PrageParkingV2
                     .AddItem("Full", fullCount, Color.Red);
 
                 AnsiConsole.Write(new Markup("[gray bold]Parking space[/]\n"));
-                AnsiConsole.Write(chart);
+                AnsiConsole.Write(chart); 
             }
 
+            //Serialiserar hela parkingSpots-arrayen till JSON på disk
             void SaveParkingSpots()
             {
                 string updatedParkingArrayJsonString = JsonSerializer.Serialize(parkingSpots, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(filepath + "ParkingArray.json", updatedParkingArrayJsonString);
             }
+            //Läser config, anpassar arraystorleken och sparar status
             void ReloadConfig()
             {
                 pragueParking.ReloadConfigTxt();
                 parkingSpots = pragueParking.GarageSizeChange(parkingSpots);
                 SaveParkingSpots();
             }
-            #region
+
+            //Skapar banner och tabeller 
+            #region 
             void FigletPragueParking()
             {
                 AnsiConsole.Write(
@@ -413,6 +427,8 @@ namespace PrageParkingV2
                     .Collapse().Centered().Expand();
                 AnsiConsole.Write(table);
             }
+
+            //Visar prislista baserat på config
             void TablePriceMenu()
             {
                 var table = new Table();
@@ -433,8 +449,8 @@ namespace PrageParkingV2
                 {
                     for (int i = 1; i < parkingSpots.Length; i++)
                     {
-                        parkingSpots[i].parkingSpot.Clear();
-                        parkingSpots[i].CurrentSize = 0;
+                        parkingSpots[i].parkingSpot.Clear(); //rensar fordon ur ruta
+                        parkingSpots[i].CurrentSize = 0; //nollställer kapacitet
                     }
                     SaveParkingSpots();
                 }
