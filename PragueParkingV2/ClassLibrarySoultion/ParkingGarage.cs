@@ -25,6 +25,7 @@ namespace ClassLibrary
                     configValues[key] = int.Parse(value);
                 }
             }
+            //läser ut värden om nycklar finns 
             configValues.TryGetValue("CarPrice", out int configCarPrice);
             configValues.TryGetValue("McPrice", out int configMcPrice);
             configValues.TryGetValue("GarageSize", out int configGarageSize);
@@ -38,6 +39,7 @@ namespace ClassLibrary
             string filepath = "../../../";
             var configValues = new Dictionary<string, int>();
 
+            //samma logik som i konstruktorn
             foreach (var line in File.ReadLines(filepath + "config.txt"))
             {
                 if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#")) continue;
@@ -50,6 +52,7 @@ namespace ClassLibrary
                     configValues[key] = int.Parse(value);
                 }
             }
+            //uppdaterar klassvärden
             configValues.TryGetValue("CarPrice", out int configCarPrice);
             configValues.TryGetValue("McPrice", out int configMcPrice);
             configValues.TryGetValue("GarageSize", out int configGarageSize);
@@ -59,10 +62,13 @@ namespace ClassLibrary
             this.GarageSize = configGarageSize;
         }
 
+        //justerar arraystorlek beroende på garagesize
         public ParkingSpot[] GarageSizeChange(ParkingSpot[] input)
         {
             bool isEmpty = true;
             ParkingSpot[] output;
+            
+            //loopar igenom
             for (int i = 0; i < input.Length; i++)
             {
                 if (input[i].CurrentSize > 0)
@@ -78,6 +84,7 @@ namespace ClassLibrary
             }
             else if (this.GarageSize < input.Length && isEmpty == true)
             {
+                
                 output = new ParkingSpot[this.GarageSize];
                 for (int i = 0; i < output.Length; i++)
                 {
@@ -95,6 +102,8 @@ namespace ClassLibrary
             }
             return output;
         }
+        
+        //läser Json med sparad status
         public ParkingSpot[] ReadParkingSpotsFromJson()
         {
             string filepath = "../../../";
@@ -116,6 +125,8 @@ namespace ClassLibrary
             }
             return parkingSpots;
         }
+
+        //kollar om ej tillåtna tecken
         public bool ContainsSpecialCharacters(string regNumber)
         {
             return Regex.IsMatch(regNumber, @"[^\p{L}\p{N}]");

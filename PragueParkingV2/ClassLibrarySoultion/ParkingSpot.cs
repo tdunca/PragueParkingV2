@@ -11,7 +11,9 @@
             parkingSpot = new List<Vehicle>();
             CurrentSize = currentSize;  
         }
-        public bool TakeVehicle(Vehicle vehicle)
+        
+       //försöker placera fordon på platsen 
+       public bool TakeVehicle(Vehicle vehicle)
         {
             if (CurrentSize + vehicle.Size <= MaxSize)
             {
