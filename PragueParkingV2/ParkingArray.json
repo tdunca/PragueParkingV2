@@ -7,21 +7,6 @@
   {
     "parkingSpot": [],
     "MaxSize": 4,
-    "CurrentSize": 4
-  },
-  {
-    "parkingSpot": [],
-    "MaxSize": 4,
-    "CurrentSize": 2
-  },
-  {
-    "parkingSpot": [],
-    "MaxSize": 4,
-    "CurrentSize": 4
-  },
-  {
-    "parkingSpot": [],
-    "MaxSize": 4,
     "CurrentSize": 0
   },
   {
@@ -77,7 +62,22 @@
   {
     "parkingSpot": [],
     "MaxSize": 4,
-    "CurrentSize": 4
+    "CurrentSize": 0
+  },
+  {
+    "parkingSpot": [],
+    "MaxSize": 4,
+    "CurrentSize": 0
+  },
+  {
+    "parkingSpot": [],
+    "MaxSize": 4,
+    "CurrentSize": 0
+  },
+  {
+    "parkingSpot": [],
+    "MaxSize": 4,
+    "CurrentSize": 0
   },
   {
     "parkingSpot": [],

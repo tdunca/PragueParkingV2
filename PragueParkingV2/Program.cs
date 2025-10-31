@@ -32,8 +32,8 @@ namespace PrageParkingV2
                         "Park vehicle",
                         "Retrieve vehicle",
                         "Move vehicle",
-                        "Find vehicle",
-                        "Clear Garage",
+                        "Locate vehicle",
+                        "Clear garage",
                         "Reload config",
                         "Exit program"
                     }
@@ -67,9 +67,9 @@ namespace PrageParkingV2
                             ReloadConfig();
                             break;
                         }
-                    case "Empty garage":
+                    case "Clear garage":
                         {
-                            EmptyGarage();
+                            ClearGarage();
                             break;
                         }
                     case "Exit program":
@@ -239,7 +239,7 @@ namespace PrageParkingV2
                 do
                 {
                     Console.Write("Enter registration number of vehicle: ");
-                    regNumber = Console.ReadLine()?.Trim();
+                    regNumber = Console.ReadLine().Trim();
                     if (string.IsNullOrEmpty(regNumber))
                     {
                         var table2 = new Table();
@@ -258,7 +258,7 @@ namespace PrageParkingV2
                 {
                     var spot = parkingSpots[i];
                     vehicleToMove = spot.parkingSpot.FirstOrDefault(Vehicle => Vehicle.RegNumber == regNumber);
-                    if (vehicleToMove! == null)
+                    if (vehicleToMove != null)
                     {
                         currentSpot = spot;
                         currentSpotIndex = i;
@@ -290,7 +290,7 @@ namespace PrageParkingV2
 
                             newSpot.parkingSpot.Add(vehicleToMove);
                             newSpot.CurrentSize += vehicleToMove.Size;
-                            Console.WriteLine($"Vehicle with registration number '{regNumber}' is moved to spot ''{newSpotIndex}");
+                            Console.WriteLine($"Vehicle with registration number '{regNumber}' is moved to spot '{newSpotIndex}");
 
                             SaveParkingSpots();
                             isValidToCheckOut = false;
@@ -355,15 +355,48 @@ namespace PrageParkingV2
                 }
                 return ((duration.TotalMinutes - freetime) / 60) * rate;
             }
+            //void ShowParkingSpaces()
+            //{
+            //    int emptyCount = -1;
+            //    int halfFullCount = 0;
+            //    int fullCount = 0;
+
+            //    foreach (var spot in parkingSpots)
+            //    {
+            //        if (spot.CurrentSize == 0)
+            //        {
+            //            emptyCount++;
+            //        }
+            //        else if (spot.CurrentSize < spot.MaxSize)
+            //        {
+            //            halfFullCount++;
+            //        }
+            //        else if (spot.CurrentSize == spot.MaxSize)
+            //        {
+            //            fullCount++;
+            //        }
+            //    }
+            //    var chart = new BreakdownChart()
+            //        .FullSize()
+            //        .AddItem("Empty", emptyCount, Color.Green)
+            //        .AddItem("Half Full", halfFullCount, Color.Yellow)
+            //        .AddItem("Full", fullCount, Color.Red);
+            //    AnsiConsole.Write(new Markup("[gray bold]Parking space[/]\n"));
+            //    AnsiConsole.Write(chart);
+            //}
+
             void ShowParkingSpaces()
             {
-                int emptyCount = -1;
+                int emptyCount = 0;
                 int halfFullCount = 0;
                 int fullCount = 0;
 
-                foreach (var spot in parkingSpots)
+                for (int i = 1; i < parkingSpots.Length; i++)
                 {
-                    if (spot.CurrentSize == 0)
+                    var spot = parkingSpots[i];
+                    if (spot == null) continue;
+
+                    if (spot.CurrentSize <= 0)
                     {
                         emptyCount++;
                     }
@@ -371,19 +404,22 @@ namespace PrageParkingV2
                     {
                         halfFullCount++;
                     }
-                    else if (spot.CurrentSize == spot.MaxSize)
+                    else // spot.CurrentSize >= spot.MaxSize
                     {
                         fullCount++;
                     }
                 }
+
                 var chart = new BreakdownChart()
                     .FullSize()
                     .AddItem("Empty", emptyCount, Color.Green)
                     .AddItem("Half Full", halfFullCount, Color.Yellow)
                     .AddItem("Full", fullCount, Color.Red);
+
                 AnsiConsole.Write(new Markup("[gray bold]Parking space[/]\n"));
                 AnsiConsole.Write(chart);
             }
+
             void SaveParkingSpots()
             {
                 string updatedParkingArrayJsonString = JsonSerializer.Serialize(parkingSpots, new JsonSerializerOptions { WriteIndented = true });
@@ -416,13 +452,13 @@ namespace PrageParkingV2
                 var table = new Table();
                 table.AddColumn("Vehicle type: ");
                 table.AddColumn(new TableColumn("Price per hour: ").Centered());
-                table.AddRow("First 10 min are free of charge");
+                table.AddRow("Free", "For the duration of the first 10 minutes");
                 table.AddRow("Car", $"{pragueParking.CarPrice} CZK per hour");
                 table.AddRow("Motorbike", $"{pragueParking.McPrice} CZK per hour");
                 AnsiConsole.Write(table.SimpleBorder().Alignment(Justify.Left));
             }
             #endregion
-            void EmptyGarage()
+            void ClearGarage()
             {
                 Console.WriteLine("Would you like to empty the entire garage?");
                 var confirm = AnsiConsole.Prompt(new SelectionPrompt<string>()
