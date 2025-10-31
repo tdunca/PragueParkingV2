@@ -1,5 +1,4 @@
-﻿//using System;
-//using System.Collections.Generic;
+﻿
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -113,8 +112,7 @@ namespace ClassLibrary
                 {
                     parkingSpots[i] = new ParkingSpot(0);
                 }
-                //Car testCar = new Car("test123", testDateTime);
-                //Mc testMc = new Mc("test456", testDateTime);
+                
             }
             return parkingSpots;
         }

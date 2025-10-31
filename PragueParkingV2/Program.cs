@@ -1,8 +1,4 @@
-﻿//sing System.ComponentModel.DataAnnotations;
-//using System.Data;
-using System.Text.Json;
-//using System.Transactions;
-//using System.Xml.Linq;
+﻿using System.Text.Json;
 using ClassLibrary;
 using Spectre.Console;
 
@@ -355,36 +351,6 @@ namespace PrageParkingV2
                 }
                 return ((duration.TotalMinutes - freetime) / 60) * rate;
             }
-            //void ShowParkingSpaces()
-            //{
-            //    int emptyCount = -1;
-            //    int halfFullCount = 0;
-            //    int fullCount = 0;
-
-            //    foreach (var spot in parkingSpots)
-            //    {
-            //        if (spot.CurrentSize == 0)
-            //        {
-            //            emptyCount++;
-            //        }
-            //        else if (spot.CurrentSize < spot.MaxSize)
-            //        {
-            //            halfFullCount++;
-            //        }
-            //        else if (spot.CurrentSize == spot.MaxSize)
-            //        {
-            //            fullCount++;
-            //        }
-            //    }
-            //    var chart = new BreakdownChart()
-            //        .FullSize()
-            //        .AddItem("Empty", emptyCount, Color.Green)
-            //        .AddItem("Half Full", halfFullCount, Color.Yellow)
-            //        .AddItem("Full", fullCount, Color.Red);
-            //    AnsiConsole.Write(new Markup("[gray bold]Parking space[/]\n"));
-            //    AnsiConsole.Write(chart);
-            //}
-
             void ShowParkingSpaces()
             {
                 int emptyCount = 0;
