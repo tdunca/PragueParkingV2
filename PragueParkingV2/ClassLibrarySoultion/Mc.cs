@@ -8,7 +8,7 @@
         {
             get { return size; }
         }
-        public Mc(string regNumber, DataTime parkingTime)
+        public Mc(string regNumber, DateTime parkingTime)
             : base(regNumber, parkingTime)
         {
 

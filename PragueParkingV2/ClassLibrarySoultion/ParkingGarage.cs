@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//using System;
+//using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace ClassLibrary
 {
-    public class ParkingGarage()
+    public class ParkingGarage
     {
         public int McPrice { get; set; }
         public int CarPrice { get; set; }
@@ -15,7 +15,7 @@ namespace ClassLibrary
             string filepath = "../../../";
             var configValues = new Dictionary<string, int>();
 
-            foreach (var line in File.ReadLines(filepath + config.txt))
+            foreach (var line in File.ReadLines(filepath + "config.txt"))
             {
                 if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#")) continue;
                 var parts = line.Split(new[] { '=' }, 2);
@@ -113,14 +113,14 @@ namespace ClassLibrary
                 {
                     parkingSpots[i] = new ParkingSpot(0);
                 }
-                Car testCar = new Car("test123", testDateTime);
-                Mc testMc = new Mc("test456", testDateTime);
+                //Car testCar = new Car("test123", testDateTime);
+                //Mc testMc = new Mc("test456", testDateTime);
             }
             return parkingSpots;
         }
         public bool ContainsSpecialCharacters(string regNumber)
         {
-            return Regex.IsMatch(regNumber, 0"[^\p{L}\p{N}]");
+            return Regex.IsMatch(regNumber, @"[^\p{L}\p{N}]");
         }
         public bool FileExists(string fileName)
         {

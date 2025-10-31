@@ -5,10 +5,10 @@ namespace ClassLibrary
     public class Vehicle
     {
         public string RegNumber { get; set; }
-        public DataTime ParkingTime { get; set; }
+        public DateTime ParkingTime { get; set; }
 
         public virtual int Size { get; set; }
-        public Vehicle(string regNumber, DataTime parkingTime)
+        public Vehicle(string regNumber, DateTime parkingTime)
         {
             RegNumber = regNumber;
             ParkingTime = parkingTime;

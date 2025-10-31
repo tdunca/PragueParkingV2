@@ -1,4 +1,4 @@
-﻿//using System.ComponentModel.DataAnnotations;
+﻿//sing System.ComponentModel.DataAnnotations;
 //using System.Data;
 using System.Text.Json;
 //using System.Transactions;
@@ -367,11 +367,11 @@ namespace PrageParkingV2
                     {
                         emptyCount++;
                     }
-                    else if (spot.Currentsize < spot.MaxSize)
+                    else if (spot.CurrentSize < spot.MaxSize)
                     {
                         halfFullCount++;
                     }
-                    else if (spot.Currentsize == spot.MaxSize)
+                    else if (spot.CurrentSize == spot.MaxSize)
                     {
                         fullCount++;
                     }
