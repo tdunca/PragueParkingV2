@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PragueParkingV2", "PraguePa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingTest", "ParkingTest\ParkingTest.csproj", "{7F44D631-0A5B-DF04-7BA2-2D49E1C17801}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "ClassLibrary1\ClassLibrary.csproj", "{1467355D-7EF8-471A-8B58-44A2FC8273DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrarySolution", "ClassLibrarySolution\ClassLibrarySolution.csproj", "{B15469A9-325E-4561-98A2-787729A34251}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{7F44D631-0A5B-DF04-7BA2-2D49E1C17801}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F44D631-0A5B-DF04-7BA2-2D49E1C17801}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F44D631-0A5B-DF04-7BA2-2D49E1C17801}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1467355D-7EF8-471A-8B58-44A2FC8273DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1467355D-7EF8-471A-8B58-44A2FC8273DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1467355D-7EF8-471A-8B58-44A2FC8273DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1467355D-7EF8-471A-8B58-44A2FC8273DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B15469A9-325E-4561-98A2-787729A34251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B15469A9-325E-4561-98A2-787729A34251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B15469A9-325E-4561-98A2-787729A34251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B15469A9-325E-4561-98A2-787729A34251}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

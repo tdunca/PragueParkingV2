@@ -154,7 +154,7 @@ namespace PrageParkingV2
 
                     if (string.IsNullOrEmpty(regNumber) | regNumber.Length < 1 | regNumber.Length > 10 | pragueParking.ContainsSpecialCharacters(regNumber))
                     {
-                        Console.WriteLine("[red]This is not a valid registration number, try again.[/]");
+                        AnsiConsole.MarkupLine("[red]This is not a valid registration number, try again.[/]");
                         continue; 
                     }
 
@@ -268,7 +268,7 @@ namespace PrageParkingV2
                 if (currentSpot == null)
                 {
                     var table3 = new Table();
-                    table3.AddColumn($"[red]Vehicle not found, try again[/]");
+                    table3.AddColumn("[red]Vehicle not found, try again[/]");
                     AnsiConsole.Write(table3);
                     return;
                 }
@@ -297,12 +297,12 @@ namespace PrageParkingV2
                         }
                         else
                         {
-                            Console.WriteLine("[red]There is not enough space in this parking spot[/]");
+                            AnsiConsole.MarkupLine("[red]There is not enough space in this parking spot[/]");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("[red]This is an invalid parking spot number. Try again[/]");
+                        AnsiConsole.MarkupLine("[red]This is an invalid parking spot number. Try again[/]");
 
                     }
                 } while (isValidToCheckOut);
@@ -333,7 +333,7 @@ namespace PrageParkingV2
                 }
                 if (!found)
                 {
-                    Console.WriteLine("[red]Vehicle not found, try again[/]");
+                    AnsiConsole.MarkupLine("[red]Vehicle not found, try again[/]");
                 }
             }
 
